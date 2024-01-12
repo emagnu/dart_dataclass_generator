@@ -4,29 +4,24 @@
 //
 //  //
 //  Import LIBRARIES
-import 'dart:convert';
 //  Import FILES
 //  PARTS
 //  PROVIDERS
 
 //
 
-// To parse this JSON data, do
-//     final user = userFromJson(jsonString);
-// User userFromJson(String str) => User.fromJson(json.decode(str));
-// String userToJson(User data) => json.encode(data.toJson());
+import 'dart:convert';
 
 class User {
-  int id;
-  String name;
-  String username;
-  String email;
-  Address address;
-  String phone;
-  String website;
-  Company company;
-
-  User({
+  final int id;
+  final String name;
+  final String username;
+  final String email;
+  final Address address;
+  final String phone;
+  final String website;
+  final Company company;
+  const User({
     required this.id,
     required this.name,
     required this.username,
@@ -37,37 +32,98 @@ class User {
     required this.company,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        name: json["name"],
-        username: json["username"],
-        email: json["email"],
-        address: Address.fromJson(json["address"]),
-        phone: json["phone"],
-        website: json["website"],
-        company: Company.fromJson(json["company"]),
-      );
+  User copyWith({
+    int? id,
+    String? name,
+    String? username,
+    String? email,
+    Address? address,
+    String? phone,
+    String? website,
+    Company? company,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      address: address ?? this.address,
+      phone: phone ?? this.phone,
+      website: website ?? this.website,
+      company: company ?? this.company,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "username": username,
-        "email": email,
-        "address": address.toJson(),
-        "phone": phone,
-        "website": website,
-        "company": company.toJson(),
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'username': username,
+      'email': email,
+      'address': address.toMap(),
+      'phone': phone,
+      'website': website,
+      'company': company.toMap(),
+    };
+  }
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id']?.toInt() ?? 0,
+      name: map['name'] ?? '',
+      username: map['username'] ?? '',
+      email: map['email'] ?? '',
+      address: Address.fromMap(map['address']),
+      phone: map['phone'] ?? '',
+      website: map['website'] ?? '',
+      company: Company.fromMap(map['company']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) => User.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'User(id: $id, name: $name, username: $username, email: $email, address: $address, phone: $phone, website: $website, company: $company)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is User &&
+        other.id == id &&
+        other.name == name &&
+        other.username == username &&
+        other.email == email &&
+        other.address == address &&
+        other.phone == phone &&
+        other.website == website &&
+        other.company == company;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        username.hashCode ^
+        email.hashCode ^
+        address.hashCode ^
+        phone.hashCode ^
+        website.hashCode ^
+        company.hashCode;
+  }
 }
 
 class Address {
-  String street;
-  String suite;
-  String city;
-  String zipcode;
-  Geo geo;
-
-  Address({
+  final String street;
+  final String suite;
+  final String city;
+  final String zipcode;
+  final Geo geo;
+  const Address({
     required this.street,
     required this.suite,
     required this.city,
@@ -75,87 +131,372 @@ class Address {
     required this.geo,
   });
 
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
-        street: json["street"],
-        suite: json["suite"],
-        city: json["city"],
-        zipcode: json["zipcode"],
-        geo: Geo.fromJson(json["geo"]),
-      );
+  Address copyWith({
+    String? street,
+    String? suite,
+    String? city,
+    String? zipcode,
+    Geo? geo,
+  }) {
+    return Address(
+      street: street ?? this.street,
+      suite: suite ?? this.suite,
+      city: city ?? this.city,
+      zipcode: zipcode ?? this.zipcode,
+      geo: geo ?? this.geo,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "street": street,
-        "suite": suite,
-        "city": city,
-        "zipcode": zipcode,
-        "geo": geo.toJson(),
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'street': street,
+      'suite': suite,
+      'city': city,
+      'zipcode': zipcode,
+      'geo': geo.toMap(),
+    };
+  }
+
+  factory Address.fromMap(Map<String, dynamic> map) {
+    return Address(
+      street: map['street'] ?? '',
+      suite: map['suite'] ?? '',
+      city: map['city'] ?? '',
+      zipcode: map['zipcode'] ?? '',
+      geo: Geo.fromMap(map['geo']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Address.fromJson(String source) =>
+      Address.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Address(street: $street, suite: $suite, city: $city, zipcode: $zipcode, geo: $geo)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Address &&
+        other.street == street &&
+        other.suite == suite &&
+        other.city == city &&
+        other.zipcode == zipcode &&
+        other.geo == geo;
+  }
+
+  @override
+  int get hashCode {
+    return street.hashCode ^
+        suite.hashCode ^
+        city.hashCode ^
+        zipcode.hashCode ^
+        geo.hashCode;
+  }
 }
 
 class Geo {
-  String lat;
-  String lng;
-
-  Geo({
+  final String lat;
+  final String lng;
+  const Geo({
     required this.lat,
     required this.lng,
   });
 
-  factory Geo.fromJson(Map<String, dynamic> json) => Geo(
-        lat: json["lat"],
-        lng: json["lng"],
-      );
+  Geo copyWith({
+    String? lat,
+    String? lng,
+  }) {
+    return Geo(
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "lat": lat,
-        "lng": lng,
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'lat': lat,
+      'lng': lng,
+    };
+  }
+
+  factory Geo.fromMap(Map<String, dynamic> map) {
+    return Geo(
+      lat: map['lat'] ?? '',
+      lng: map['lng'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Geo.fromJson(String source) => Geo.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'Geo(lat: $lat, lng: $lng)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Geo && other.lat == lat && other.lng == lng;
+  }
+
+  @override
+  int get hashCode => lat.hashCode ^ lng.hashCode;
 }
 
 class Company {
-  String name;
-  String catchPhrase;
-  String bs;
-
-  Company({
+  final String name;
+  final String catchPhrase;
+  final String bs;
+  const Company({
     required this.name,
     required this.catchPhrase,
     required this.bs,
   });
 
-  factory Company.fromJson(Map<String, dynamic> json) => Company(
-        name: json["name"],
-        catchPhrase: json["catchPhrase"],
-        bs: json["bs"],
-      );
+  Company copyWith({
+    String? name,
+    String? catchPhrase,
+    String? bs,
+  }) {
+    return Company(
+      name: name ?? this.name,
+      catchPhrase: catchPhrase ?? this.catchPhrase,
+      bs: bs ?? this.bs,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "catchPhrase": catchPhrase,
-        "bs": bs,
-      };
-}
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'catchPhrase': catchPhrase,
+      'bs': bs,
+    };
+  }
+
+  factory Company.fromMap(Map<String, dynamic> map) {
+    return Company(
+      name: map['name'] ?? '',
+      catchPhrase: map['catchPhrase'] ?? '',
+      bs: map['bs'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Company.fromJson(String source) =>
+      Company.fromMap(json.decode(source));
+
+  @override
+  String toString() =>
+      'Company(name: $name, catchPhrase: $catchPhrase, bs: $bs)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Company &&
+        other.name == name &&
+        other.catchPhrase == catchPhrase &&
+        other.bs == bs;
+  }
+
+  @override
+  int get hashCode => name.hashCode ^ catchPhrase.hashCode ^ bs.hashCode;
+}  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // {
-//   "id": 10,
-//   "name": "Clementina DuBuque",
-//   "username": "Moriah.Stanton",
-//   "email": "Rey.Padberg@karina.biz",
-//   "address": {
-//     "street": "Kattie Turnpike",
-//     "suite": "Suite 198",
-//     "city": "Lebsackbury",
-//     "zipcode": "31428-2261",
-//     "geo": {
-//       "lat": "-38.2386",
-//       "lng": "57.2232"
+//     "id": 10,
+//     "name": "Clementina DuBuque",
+//     "username": "Moriah.Stanton",
+//     "email": "Rey.Padberg@karina.biz",
+//     "address": {
+//       "street": "Kattie Turnpike",
+//       "suite": "Suite 198",
+//       "city": "Lebsackbury",
+//       "zipcode": "31428-2261",
+//       "geo": {
+//         "lat": "-38.2386",
+//         "lng": "57.2232"
 //       }
-//   },
-//   "phone": "024-648-3804",
-//   "website": "ambrose.net",
-//   "company": {
-//     "name": "Hoeger LLC",
-//     "catchPhrase": "Centralized empowering task-force",
-//     "bs": "target end-to-end models"
+//     },
+//     "phone": "024-648-3804",
+//     "website": "ambrose.net",
+//     "company": {
+//       "name": "Hoeger LLC",
+//       "catchPhrase": "Centralized empowering task-force",
+//       "bs": "target end-to-end models"
 //     }
+//  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // To parse this JSON data, do
+// //     final user = userFromJson(jsonString);
+// // User userFromJson(String str) => User.fromJson(json.decode(str));
+// // String userToJson(User data) => json.encode(data.toJson());
+
+// class User {
+//   final int id;
+//   final String name;
+//   final String username;
+//   final String email;
+//   final Address address;
+//   final String phone;
+//   final String website;
+//   final Company company;
+
+//   User({
+//     required this.id,
+//     required this.name,
+//     required this.username,
+//     required this.email,
+//     required this.address,
+//     required this.phone,
+//     required this.website,
+//     required this.company,
+//   });
+
+//   factory User.fromJson(Map<String, dynamic> json) => User(
+//         id: json["id"],
+//         name: json["name"],
+//         username: json["username"],
+//         email: json["email"],
+//         address: Address.fromJson(json["address"]),
+//         phone: json["phone"],
+//         website: json["website"],
+//         company: Company.fromJson(json["company"]),
+//       );
+
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "name": name,
+//         "username": username,
+//         "email": email,
+//         "address": address.toJson(),
+//         "phone": phone,
+//         "website": website,
+//         "company": company.toJson(),
+//       };
 // }
+
+// class Address {
+//   String street;
+//   String suite;
+//   String city;
+//   String zipcode;
+//   Geo geo;
+
+//   Address({
+//     required this.street,
+//     required this.suite,
+//     required this.city,
+//     required this.zipcode,
+//     required this.geo,
+//   });
+
+//   factory Address.fromJson(Map<String, dynamic> json) => Address(
+//         street: json["street"],
+//         suite: json["suite"],
+//         city: json["city"],
+//         zipcode: json["zipcode"],
+//         geo: Geo.fromJson(json["geo"]),
+//       );
+
+//   Map<String, dynamic> toJson() => {
+//         "street": street,
+//         "suite": suite,
+//         "city": city,
+//         "zipcode": zipcode,
+//         "geo": geo.toJson(),
+//       };
+// }
+
+// class Geo {
+//   String lat;
+//   String lng;
+
+//   Geo({
+//     required this.lat,
+//     required this.lng,
+//   });
+
+//   factory Geo.fromJson(Map<String, dynamic> json) => Geo(
+//         lat: json["lat"],
+//         lng: json["lng"],
+//       );
+
+//   Map<String, dynamic> toJson() => {
+//         "lat": lat,
+//         "lng": lng,
+//       };
+// }
+
+// class Company {
+//   String name;
+//   String catchPhrase;
+//   String bs;
+
+//   Company({
+//     required this.name,
+//     required this.catchPhrase,
+//     required this.bs,
+//   });
+
+//   factory Company.fromJson(Map<String, dynamic> json) => Company(
+//         name: json["name"],
+//         catchPhrase: json["catchPhrase"],
+//         bs: json["bs"],
+//       );
+
+//   Map<String, dynamic> toJson() => {
+//         "name": name,
+//         "catchPhrase": catchPhrase,
+//         "bs": bs,
+//       };
+// }
+
+

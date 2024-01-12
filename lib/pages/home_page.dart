@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 //  Import FILES
 import '../widgets/custom_button.dart';
 import 'person_page.dart';
+import 'user_list_page.dart';
 //  PARTS
 //  PROVIDERS
 
@@ -24,6 +25,10 @@ class HomePage extends StatelessWidget {
             CustomButton(
               title: 'Person',
               child: PersonPage(),
+            ),
+            CustomButton(
+              title: 'User List',
+              child: UserListPage(),
             ),
           ],
         ),
